@@ -1,5 +1,5 @@
 
-# TODO: public mdule interface goes here
+# TODO: public module interface goes here
 def some_operation():
     """Function documentation should be added always!"""
     print('something...')
