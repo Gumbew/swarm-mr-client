@@ -1,9 +1,21 @@
+import argparse
+from mapreduce import task_runner_proxy
 
-# TODO: public mdule interface goes here
-def some_operation():
-    """Function documentation should be added always!"""
-    print('something...')
+parser = argparse.ArgumentParser()
+parser.add_argument("--map", action="store")
+parser.add_argument("--map_f", action="store")
+parser.add_argument("--reduce", action="store")
+parser.add_argument("--key_delimiter", action="store")
 
-# TODO: include CLI arguments parsing logic here and call appropriate functions from the above
-if __name__ == '__main__':
-    some_operation()
+args = parser.parse_args()
+
+
+def cli_parser():
+    TR = task_runner_proxy.TaskRunner
+    if args.map_f is None:
+        return TR.map_reduce(False, args.map, args.reduce, args.key_delimiter)
+    else:
+        return TR.map_reduce(True, args.map_f, args.reduce, args.key_delimiter)
+
+
+cli_parser()
