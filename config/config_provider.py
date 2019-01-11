@@ -1,14 +1,19 @@
 import json
 
-json_file = 'json/cluster_access.json'
-json_data = open(json_file)
-data = json.load(json_data)
-json_data.close()
 
+class ConfigProvider:
 
-def get_arbiter_address():
-    return data["arbiter_address"]
+    @staticmethod
+    def get_arbiter_address(file_path):
+        json_data = open(file_path)
+        data = json.load(json_data)
+        json_data.close()
+        return data["arbiter_address"]
 
+    @staticmethod
+    def get_access_token(file_path):
+        json_data = open(file_path)
+        data = json.load(json_data)
+        json_data.close()
+        return data["access_token"]
 
-def get_access_token():
-    return data["access_token"]

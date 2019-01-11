@@ -5,8 +5,9 @@ from config import config_provider
 
 
 def post(map, reduce, key_delimiter):
-    address = config_provider.get_arbiter_address()
-    access_token = config_provider.get_access_token()
+    address = config_provider.ConfigProvider.get_arbiter_address('json/cluster_access.json')
+    access_token = config_provider.ConfigProvider.get_access_token('json/cluster_access.json')
+
 
     url = 'http://' + address
 

@@ -2,10 +2,10 @@ from mapreduce.commands import map_reduce_command
 
 
 class TaskRunner:
-    def map_reduce(self, is_file, mapper, reducer, key_delimiter):
+    def map_reduce(self, is_mapper_in_file, mapper, is_reducer_in_file,reducer, key_delimiter):
 
         MRC = map_reduce_command.MapReduceCommand()
-        if is_file is False:
+        if is_mapper_in_file is False:
             MRC.setMapper(mapper)
             MRC.setReducer(reducer)
             MRC.setKeyDelimiter(key_delimiter)
