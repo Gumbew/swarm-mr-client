@@ -23,21 +23,18 @@ class MapReduceCommand(base_command):
         s = base64.encode(file_content)
         self._data["reducer"] = s
 
-    def set_reducer(self, path):
-        s = base64.encode(path)
+    def set_reducer(self, content):
+        s = base64.encode(content)
         self._data["reducer"] = s
 
+    # check if method to get (map)_key_delimiter from file is necessary
     def set_key_delimiter(self, key_delimiter):
         s = base64.encode(key_delimiter)
         self._data["key_delimiter"] = s
 
-    def validate(self):
-        if self._data["mapper"] is None:
-            raise AttributeError("Mapper is empty!")
-        if self._data["reducer"] is None:
-            raise AttributeError("Reducer is empty!")
-        return True
-
     def send(self):
-        self.validate()
-        base_command.base_http_client.post(self._data["mapper"], self._data["reducer"], self._data["key_delimiter"])
+        super().__init__(self._data["mapper"], self._data["reducer"], self._data["key_delimiter"])
+        super().send()
+        # base_command.base_http_client.post(self._data["mapper"], self._data["reducer"], self._data["key_delimiter"])
+        # base_command.BaseCommand(self._data["mapper"], self._data["reducer"], self._data["key_delimiter"]).send()
+        return
