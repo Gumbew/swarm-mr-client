@@ -4,8 +4,8 @@ import base64
 from config import config_provider
 
 def post(map, reduce, key_delimiter):
-    address = config_provider.ConfigProvider.get_arbiter_address('json/cluster_access.json')
-    access_token = config_provider.ConfigProvider.get_access_token('json/cluster_access.json')
+    address = config_provider.ConfigProvider.get_arbiter_address('\\json\\cluster_access.json')
+    access_token = config_provider.ConfigProvider.get_access_token('\\json\\cluster_access.json')
 
 
     url = 'http://' + address
@@ -15,8 +15,8 @@ def post(map, reduce, key_delimiter):
     }
 
     payload = {
-        "map": base64.encode(map),
-        "reduce": base64.encode(reduce),
+        "map": map,
+        "reduce": reduce,
         "key_delimiter": key_delimiter
     }
     response = requests.post(url, params=params,

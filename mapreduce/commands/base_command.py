@@ -1,4 +1,4 @@
-from http import base_http_client
+from http_client import base_http_client
 
 
 class BaseCommand:

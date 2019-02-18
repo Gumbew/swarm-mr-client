@@ -14,15 +14,17 @@ args = parser.parse_args()
 
 def cli_parser():
     tr = task_runner_proxy.TaskRunner()
-    if args.map_f is None:
-        if args.reduce_f is None:
-            return tr.map_reduce(False, args.map, False, args.reduce, args.key_delimiter)
+    if args.mf is None:
+        if args.rf is None:
+            return tr.map_reduce(False, args.m, False, args.r, args.kd)
         else:
-            return tr.map_reduce(False, args.map, True, args.reduce, args.key_delimiter)
-    elif args.reduce_f is None:
-        return tr.map_reduce(True, args.map, False, args.reduce, args.key_delimiter)
+            return tr.map_reduce(False, args.m, True, args.r, args.kd)
+    elif args.rf is None:
+        return tr.map_reduce(True, args.m, False, args.r, args.kd)
     else:
-        return tr.map_reduce(True, args.map, True, args.reduce, args.key_delimiter)
+        return tr.map_reduce(True, args.m, True, args.r, args.kd)
 
 
-cli_parser()
+tr = task_runner_proxy.TaskRunner()
+tr.map_reduce(False, "MMM", False, "RRR", "KKK")
+#cli_parser()
