@@ -30,4 +30,6 @@ def cli_parser():
 tr = task_runner_proxy.TaskRunner()
 tr.map_reduce(False, "MMM", False, "RRR", "KKK", "C:\\Users\\smart\\workspace\\client_data\\text.txt",
               "C:\\Users\\smart\\workspace\\client_data\\out.txt")
-# cli_parser()
+
+if __name__ == '__main__':
+    cli_parser()

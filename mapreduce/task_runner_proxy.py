@@ -1,6 +1,5 @@
 from mapreduce.commands import map_reduce_command
 
-
 class TaskRunner:
 
     @staticmethod

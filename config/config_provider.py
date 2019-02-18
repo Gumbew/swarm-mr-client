@@ -16,4 +16,3 @@ class ConfigProvider:
         data = json.load(json_data)
         json_data.close()
         return data["access_token"]
-
