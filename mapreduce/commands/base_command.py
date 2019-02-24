@@ -29,4 +29,11 @@ class BaseCommand:
 
     def send(self):
         self.validate()
-        base_http_client.post(self.map, self.reduce, self.key_delimiter, self.source_file, self.destination_file)
+        data = {
+            "map": self.map,
+            "reduce": self.reduce,
+            "key_delimiter": self.key_delimiter,
+            "src_file": self.source_file,
+            "dest_file": self.destination_file
+        }
+        base_http_client.post(data)

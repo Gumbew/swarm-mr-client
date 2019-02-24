@@ -14,22 +14,22 @@ parser.add_argument("--dest", "--destination_file", action="store", help="Destin
 args = parser.parse_args()
 
 
-def cli_parser():
-    tr = task_runner_proxy.TaskRunner()
+def cli_parser(tr):
+
     if args.mf is None:
         if args.rf is None:
-            return tr.map_reduce(False, args.m, False, args.r, args.kd, args.src, args.dist)
+            return tr.map_reduce(False, args.m, False, args.r, args.kd, args.src, args.dest)
         else:
-            return tr.map_reduce(False, args.m, True, args.r, args.kd, args.src, args.dist)
+            return tr.map_reduce(False, args.m, True, args.r, args.kd, args.src, args.dest)
     elif args.rf is None:
-        return tr.map_reduce(True, args.m, False, args.r, args.kd, args.src, args.dist)
+        return tr.map_reduce(True, args.m, False, args.r, args.kd, args.src, args.dest)
     else:
-        return tr.map_reduce(True, args.m, True, args.r, args.kd, args.src, args.dist)
+        return tr.map_reduce(True, args.m, True, args.r, args.kd, args.src, args.dest)
 
 
 tr = task_runner_proxy.TaskRunner()
 tr.map_reduce(False, "MMM", False, "RRR", "KKK", "C:\\Users\\smart\\workspace\\client_data\\text.txt",
-              "C:\\Users\\smart\\workspace\\client_data\\out.txt")
+                  "C:\\Users\\smart\\workspace\\client_data\\out.txt")
 
-if __name__ == '__main__':
-    cli_parser()
+#if __name__ == '__main__':
+# cli_parser(tr)
