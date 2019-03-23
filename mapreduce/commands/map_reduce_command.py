@@ -46,7 +46,7 @@ class MapReduceCommand(base_command.BaseCommand):
     def send(self):
         super().__init__(self._data["mapper"], self._data["reducer"], self._data["key_delimiter"],
                          self._data["source_file"], self._data["destination_file"])
-        super().send()
+
         # base_command.base_http_client.post(self._data["mapper"], self._data["reducer"], self._data["key_delimiter"])
         # base_command.BaseCommand(self._data["mapper"], self._data["reducer"], self._data["key_delimiter"]).send()
-        return
+        return super().send()

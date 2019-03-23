@@ -16,3 +16,17 @@ class ConfigProvider:
         data = json.load(json_data)
         json_data.close()
         return data["access_token"]
+
+    @staticmethod
+    def get_map_key_delimiter(file_path):
+        json_data = open(os.path.dirname(__file__) + file_path)
+        data = json.load(json_data)
+        json_data.close()
+        return data['map_reduce']['map_key_delimiter']
+
+    @staticmethod
+    def get_field_delimiter(file_path):
+        json_data = open(os.path.dirname(__file__) + file_path)
+        data = json.load(json_data)
+        json_data.close()
+        return data['map_reduce']['field_delimiter']

@@ -1,5 +1,6 @@
 import argparse
 from mapreduce import task_runner_proxy
+from filesystem import service
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--m", "--mapper", action="store", help="Set mapper as a content")
@@ -28,8 +29,10 @@ def cli_parser(tr):
 
 
 tr = task_runner_proxy.TaskRunner()
-tr.map_reduce(False, "MMM", False, "RRR", "KKK", "C:\\Users\\smart\\workspace\\client_data\\text.txt",
+distribution= tr.map_reduce(False, "MMM", False, "RRR", "KKK", "C:\\Users\\smart\\workspace\\client_data\\text.txt",
                   "C:\\Users\\smart\\workspace\\client_data\\out.txt")
+#tr.append("C:\\Users\\smart\\workspace\\client_data\\text.txt",'SOSI PISOS')
+tr.main_func("C:\\Users\\smart\\workspace\\client_data\\text.txt", distribution['distribution'])
 
 #if __name__ == '__main__':
 # cli_parser(tr)
