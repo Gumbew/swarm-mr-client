@@ -54,7 +54,8 @@ class TaskRunner:
                 }
         }
 
-        response = requests.post('http://' + data_node_ip,
+
+        response = requests.post(data_node_ip,
                                  data=json.dumps(data))
 
         return response.json()
@@ -62,7 +63,10 @@ class TaskRunner:
     @staticmethod
     def main_func(file_name, distribution):
         splitted_file = service.split_file(file_name, distribution)
-        counter=0
+        counter=1
         for fragment in splitted_file:
-
+            if counter <= distribution:
+                counter += 1
+            file_name += "\\f" + str(counter)
+            print(file_name)
             TaskRunner.write(file_name, fragment, TaskRunner.append(file_name, fragment))

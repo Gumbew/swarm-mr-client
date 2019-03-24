@@ -22,8 +22,8 @@ class BaseCommand:
             raise AttributeError("Destination file in not mentioned!")
         if os.path.exists(self.source_file) is False:
             raise FileExistsError()
-        if os.path.exists(self.destination_file) is False:
-            raise FileExistsError()
+        #if os.path.exists(self.destination_file) is False:
+        #    raise FileExistsError()
 
         return True
 
