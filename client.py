@@ -1,5 +1,6 @@
 import argparse
 from mapreduce import task_runner_proxy
+import os
 from filesystem import service
 
 parser = argparse.ArgumentParser()
@@ -16,7 +17,6 @@ args = parser.parse_args()
 
 
 def cli_parser(tr):
-
     if args.mf is None:
         if args.rf is None:
             return tr.map_reduce(False, args.m, False, args.r, args.kd, args.src, args.dest)
@@ -29,10 +29,11 @@ def cli_parser(tr):
 
 
 tr = task_runner_proxy.TaskRunner()
-distribution= tr.map_reduce(False, "MMM", False, "RRR", "KKK", "C:\\Users\\Anchi\\workspace\\client_data\\text.txt",
-                  "C:\\Users\\Anchi\\workspace\\client_data\\out.txt")
-#tr.append("C:\\Users\\Anchi\\workspace\\client_data\\text.txt",'SOSI PISOS')
-tr.main_func("C:\\Users\\Anchi\\workspace\\client_data\\text.txt", distribution['distribution'])
-
-#if __name__ == '__main__':
+distribution = tr.map_reduce(False, "MMM", False, "RRR", "KKK",
+                             os.path.dirname(__file__) + "\\..\\client_data\\text.txt",
+                             os.path.dirname(__file__) + "\\..\\client_data\\out.txt")
+# tr.append(os.path.dirname(__file__)+"\\..\\..\\client_data\\text.txt",'segment example')
+tr.main_func(os.path.dirname(__file__) + "\\..\\client_data\\text.txt", distribution['distribution'],
+             os.path.dirname(__file__) + "\\..\\client_data\\out.txt")
+# if __name__ == '__main__':
 # cli_parser(tr)

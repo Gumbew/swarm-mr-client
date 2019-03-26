@@ -10,7 +10,8 @@ def split_file(file, m):
     data = open(file)
     content = list()
     for i in data.readlines():
-        content.append(i.strip())
+        #content.append(i.strip())
+        content.append(i)
     res = [content[x:x + m] for x in range(0, len(content), m)]
 
     #print(res)

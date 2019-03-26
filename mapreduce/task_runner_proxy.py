@@ -61,12 +61,12 @@ class TaskRunner:
         return response.json()
 
     @staticmethod
-    def main_func(file_name, distribution):
+    def main_func(file_name, distribution, dest):
         splitted_file = service.split_file(file_name, distribution)
-        counter=1
+        counter = 1
         for fragment in splitted_file:
             if counter <= distribution:
                 counter += 1
-            file_name += "\\f" + str(counter)
-            print(file_name)
-            TaskRunner.write(file_name, fragment, TaskRunner.append(file_name, fragment))
+                dest += "\\f" + str(counter)
+                TaskRunner.write(dest, fragment, TaskRunner.append(dest, fragment))
+                dest = dest[:-3]
