@@ -2,9 +2,11 @@ from mapreduce.commands import base_command
 from filesystem import service
 #import client
 from http_client import base_http_client
+import requests
+import json
 
 
-class AppendCommand(base_command.BaseCommand):
+class WriteCommand(base_command.BaseCommand):
 
     def __init__(self):
         self._data = {}
@@ -15,12 +17,17 @@ class AppendCommand(base_command.BaseCommand):
     def set_file_name(self, file_name):
         self._data["file_name"] = file_name
 
+    def set_data_node_ip(self, data_node_ip):
+        self._data['data_node_ip'] = data_node_ip
+
     def validate(self):
         pass
 
     def send(self):
         self.validate()
         data = dict()
-        data['append'] = self._data
+        data['write'] = self._data
         super().__init__(data)
-        return super().send()
+        print(self._data)
+        print(data)
+        return super().send(self._data['write']['data_node_ip'])

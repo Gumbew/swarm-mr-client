@@ -1,11 +1,12 @@
 from mapreduce.commands import base_command
 import base64
+import os
 
 
 class MapReduceCommand(base_command.BaseCommand):
 
     def __init__(self):
-        self._data = {}
+        self._data = dict()
 
     def set_mapper_from_file(self, path):
         file = open(path, 'r')
@@ -43,10 +44,21 @@ class MapReduceCommand(base_command.BaseCommand):
         encoded = dest_file
         self._data["destination_file"] = encoded
 
-    def send(self):
-        super().__init__(self._data["mapper"], self._data["reducer"], self._data["key_delimiter"],
-                         self._data["source_file"], self._data["destination_file"])
+    def validate(self):
+        if self._data['mapper'] is None:
+            raise AttributeError("Mapper is empty!")
+        if self._data['reducer'] is None:
+            raise AttributeError("Reducer is empty!")
+        if self._data['source_file'] is None:
+            raise AttributeError("Source file in not mentioned!")
+        if self._data['destination_file'] is None:
+            raise AttributeError("Destination file in not mentioned!")
+        if os.path.exists(self._data['source_file']) is False:
+            raise FileExistsError()
 
-        # base_command.base_http_client.post(self._data["mapper"], self._data["reducer"], self._data["key_delimiter"])
-        # base_command.BaseCommand(self._data["mapper"], self._data["reducer"], self._data["key_delimiter"]).send()
+    def send(self):
+        self.validate()
+        data = dict()
+        data['map'] = self._data
+        super().__init__(data)
         return super().send()

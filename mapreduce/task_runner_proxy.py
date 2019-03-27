@@ -1,4 +1,6 @@
 from mapreduce.commands import map_reduce_command
+from mapreduce.commands import append_command
+from mapreduce.commands import write_command
 from http_client import base_http_client
 from filesystem import service
 import requests
@@ -27,46 +29,29 @@ class TaskRunner:
         return mrc.send()
 
     @staticmethod
-    # def append(dest_file, distribution):
-    #     splitted_file = service.split_file("C:\\Users\\smart\\workspace\\client_data\\text.txt", distribution)
-    #     data = {
-    #         'file_name':'C:\\Users\\smart\\workspace\\client_data\\out.txt',
-    #
-    #     }
-    #     print(splitted_file)
     def append(file_name, segment):
-        data = {
-            'append': {
-                'file_name': file_name,
-                'segment': segment
-            }
-        }
-        # base_http_client.post(data)
-        return base_http_client.post(data)['data_node_ip']
+        app = append_command.AppendCommand()
+        app.set_file_name(file_name)
+        app.set_segment(segment)
+        return app.send()
 
     @staticmethod
     def write(file_name, segment, data_node_ip):
-        data = {
-            'write':
-                {
-                    'file_name': file_name,
-                    'segment': segment
-                }
-        }
+        wc = write_command.WriteCommand()
+        wc.set_segment(segment)
+        wc.set_file_name(file_name)
 
+        wc.set_data_node_ip(data_node_ip['data_node_ip'])
 
-        response = requests.post(data_node_ip,
-                                 data=json.dumps(data))
-
-        return response.json()
+        return wc.send()
 
     @staticmethod
     def main_func(file_name, distribution, dest):
         splitted_file = service.split_file(file_name, distribution)
         counter = 1
         for fragment in splitted_file:
-            if counter <= distribution:
+            if counter >= distribution:
                 counter += 1
-                dest += "\\f" + str(counter)
-                TaskRunner.write(dest, fragment, TaskRunner.append(dest, fragment))
-                dest = dest[:-3]
+            dest += "\\f" + str(counter)
+            TaskRunner.write(dest, fragment, TaskRunner.append(dest, fragment))
+            dest = dest[:-3]
