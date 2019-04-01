@@ -1,10 +1,9 @@
-from mapreduce.commands import map_reduce_command
-from mapreduce.commands import append_command
-from mapreduce.commands import write_command
-from http_client import base_http_client
 from filesystem import service
-import requests
-import json
+from mapreduce.commands import append_command
+from mapreduce.commands import make_file_command
+from mapreduce.commands import map_reduce_command
+from mapreduce.commands import refresh_table_command
+from mapreduce.commands import write_command
 
 
 class TaskRunner:
@@ -46,12 +45,34 @@ class TaskRunner:
         return wc.send()
 
     @staticmethod
+    def refresh_table(file_name, ip, segment_name):
+        rtc = refresh_table_command.RefreshTableCommand()
+        rtc.set_file_name(file_name)
+        rtc.set_ip(ip['data_node_ip'])
+        rtc.set_segment_name(segment_name)
+
+        return rtc.send()
+
+    @staticmethod
     def main_func(file_name, distribution, dest):
         splitted_file = service.split_file(file_name, distribution)
-        counter = 1
+        counter = 0
         for fragment in splitted_file:
-            if counter >= distribution:
-                counter += 1
-            dest += "\\f" + str(counter)
-            TaskRunner.write(dest, fragment, TaskRunner.append(dest, fragment))
-            dest = dest[:-3]
+
+            counter += 1
+            segment_name = "f" + str(counter)
+            ip = TaskRunner.append(dest, fragment)
+            TaskRunner.write(dest+'\\'+segment_name, fragment, ip)
+            TaskRunner.refresh_table(dest, ip, segment_name)
+
+
+
+    @staticmethod
+    def make_file(dest_file):
+        mfc = make_file_command.MakeFileCommand()
+        mfc.set_destination_file(dest_file)
+        return mfc.send()
+
+    @staticmethod
+    def send_info():
+        pass

@@ -28,6 +28,5 @@ class WriteCommand(base_command.BaseCommand):
         data = dict()
         data['write'] = self._data
         super().__init__(data)
-        print(self._data)
-        print(data)
+
         return super().send(self._data['write']['data_node_ip'])

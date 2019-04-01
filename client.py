@@ -29,11 +29,13 @@ def cli_parser(tr):
 
 
 tr = task_runner_proxy.TaskRunner()
-distribution = tr.map_reduce(False, "MMM", False, "RRR", "KKK",
-                             os.path.dirname(__file__) + "\\..\\client_data\\text.txt",
-                             os.path.dirname(__file__) + "\\..\\client_data\\out.txt")
+distribution = tr.make_file(os.path.dirname(__file__) + "\\..\\..\\client_data\\out.txt")
+
 # tr.append(os.path.dirname(__file__)+"\\..\\..\\client_data\\text.txt",'segment example')
-tr.main_func(os.path.dirname(__file__) + "\\..\\client_data\\text.txt", distribution['distribution'],
-             os.path.dirname(__file__) + "\\..\\client_data\\out.txt")
+tr.main_func(os.path.dirname(__file__) + "\\..\\..\\client_data\\text.txt", distribution['distribution'],
+             os.path.dirname(__file__) + "\\..\\..\\client_data\\out.txt")
+tr.map_reduce(False, "MMM", False, "RRR", "KKK",
+                             os.path.dirname(__file__) + "\\..\\..\\client_data\\text.txt",
+                             os.path.dirname(__file__) + "\\..\\..\\client_data\\out.txt")
 # if __name__ == '__main__':
 # cli_parser(tr)

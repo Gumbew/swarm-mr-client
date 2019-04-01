@@ -53,6 +53,7 @@ class MapReduceCommand(base_command.BaseCommand):
             raise AttributeError("Source file in not mentioned!")
         if self._data['destination_file'] is None:
             raise AttributeError("Destination file in not mentioned!")
+        print(self._data['source_file'])
         if os.path.exists(self._data['source_file']) is False:
             raise FileExistsError()
 
