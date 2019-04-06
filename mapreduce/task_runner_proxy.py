@@ -4,6 +4,7 @@ from mapreduce.commands import make_file_command
 from mapreduce.commands import map_reduce_command
 from mapreduce.commands import refresh_table_command
 from mapreduce.commands import write_command
+from config import config_provider
 
 
 class TaskRunner:
@@ -23,6 +24,8 @@ class TaskRunner:
             mrc.set_reducer_from_file(reducer)
 
         mrc.set_key_delimiter(key_delimiter)
+        field_delimiter = config_provider.ConfigProvider.get_field_delimiter('\\..\\config\\json\\client_config.json')
+        mrc.set_field_delimiter(field_delimiter)
         mrc.set_source_file(source_file)
         mrc.set_destination_file(destination_file)
         return mrc.send()

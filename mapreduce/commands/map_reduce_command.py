@@ -36,6 +36,10 @@ class MapReduceCommand(base_command.BaseCommand):
         encoded = key_delimiter
         self._data["key_delimiter"] = encoded
 
+    def set_field_delimiter(self, field_delimiter):
+        encoded = field_delimiter
+        self._data['field_delimiter'] = encoded
+
     def set_source_file(self, src_file):
         encoded = src_file
         self._data["source_file"] = encoded
@@ -60,6 +64,6 @@ class MapReduceCommand(base_command.BaseCommand):
     def send(self):
         self.validate()
         data = dict()
-        data['map'] = self._data
+        data['map_reduce'] = self._data
         super().__init__(data)
         return super().send()
