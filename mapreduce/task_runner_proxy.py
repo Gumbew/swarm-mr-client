@@ -5,6 +5,7 @@ from mapreduce.commands import map_reduce_command
 from mapreduce.commands import refresh_table_command
 from mapreduce.commands import write_command
 from config import config_provider
+import os
 
 
 class TaskRunner:
@@ -24,7 +25,8 @@ class TaskRunner:
             mrc.set_reducer_from_file(reducer)
 
         mrc.set_key_delimiter(key_delimiter)
-        field_delimiter = config_provider.ConfigProvider.get_field_delimiter('\\..\\config\\json\\client_config.json')
+        field_delimiter = config_provider.ConfigProvider.get_field_delimiter(
+            os.path.join('..', 'config', 'json', 'client_config.json'))
         mrc.set_field_delimiter(field_delimiter)
         mrc.set_source_file(source_file)
         mrc.set_destination_file(destination_file)
@@ -61,14 +63,11 @@ class TaskRunner:
         splitted_file = service.split_file(file_name, distribution)
         counter = 0
         for fragment in splitted_file:
-
             counter += 1
             segment_name = "f" + str(counter)
             ip = TaskRunner.append(dest, fragment)
-            TaskRunner.write(dest+'\\'+segment_name, fragment, ip)
+            TaskRunner.write(dest + os.sep + segment_name, fragment, ip)
             TaskRunner.refresh_table(dest, ip, segment_name)
-
-
 
     @staticmethod
     def make_file(dest_file):

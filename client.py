@@ -29,13 +29,14 @@ def cli_parser(tr):
 
 
 tr = task_runner_proxy.TaskRunner()
-distribution = tr.make_file(os.path.dirname(__file__) + "\\..\\..\\client_data\\out.txt")
+distribution = tr.make_file(os.path.join(os.path.dirname(__file__), '..', '..', 'client_data','out.txt'))
 
 # tr.append(os.path.dirname(__file__)+"\\..\\..\\client_data\\text.txt",'segment example')
-tr.main_func(os.path.dirname(__file__) + "\\..\\..\\client_data\\text.txt", distribution['distribution'],
-             os.path.dirname(__file__) + "\\..\\..\\client_data\\out.txt")
+tr.main_func(os.path.join(os.path.dirname(__file__), '..', '..', 'client_data','text.txt'), distribution['distribution'],
+             os.path.join(os.path.dirname(__file__), '..', '..', 'client_data','out.txt'))
 tr.map_reduce(False, "MMM", False, "RRR", "0",
-                            os.path.dirname(__file__) + "\\..\\..\\client_data\\text.txt",
-                           os.path.dirname(__file__) + "\\..\\..\\client_data\\out.txt")
+              os.path.join(os.path.dirname(__file__), '..', '..', 'client_data', 'text.txt'),
+              os.path.join(os.path.dirname(__file__), '..', '..', 'client_data','out.txt'))
 # if __name__ == '__main__':
 # cli_parser(tr)
+
