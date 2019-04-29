@@ -1,9 +1,6 @@
 from filesystem import service
-from mapreduce.commands import append_command
-from mapreduce.commands import make_file_command
-from mapreduce.commands import map_reduce_command
-from mapreduce.commands import refresh_table_command
-from mapreduce.commands import write_command
+from mapreduce.commands import append_command, make_file_command, map_reduce_command, \
+    refresh_table_command, write_command, clear_data_command
 from config import config_provider
 import os
 
@@ -78,3 +75,9 @@ class TaskRunner:
     @staticmethod
     def send_info():
         pass
+
+    @staticmethod
+    def clear_data(folder_name):
+        cdc = clear_data_command.ClearDataCommand()
+        cdc.set_folder_name(folder_name)
+        return cdc.send()

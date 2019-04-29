@@ -29,6 +29,7 @@ def cli_parser(tr):
 
 
 tr = task_runner_proxy.TaskRunner()
+tr.clear_data('data')
 distribution = tr.make_file(os.path.join(os.path.dirname(__file__), '..', '..', 'client_data','out.txt'))
 
 # tr.append(os.path.dirname(__file__)+"\\..\\..\\client_data\\text.txt",'segment example')
