@@ -3,16 +3,21 @@ import base64
 import os
 
 
+
 class MapReduceCommand(base_command.BaseCommand):
 
     def __init__(self):
         self._data = dict()
 
     def set_mapper_from_file(self, path):
-        file = open(path, 'r')
+        file = open(path, 'rb')
         file_content = file.read()
-        encoded = base64.b64encode(file_content.encode())
-        self._data["mapper"] = encoded
+        encoded = base64.b64encode(file_content)
+        decoded = encoded.decode('utf-8')
+
+        print(encoded)
+        print(decoded)
+        self._data["mapper"] = decoded
 
     def set_mapper(self, content):
         # encoded = base64.b64encode(content.encode())
@@ -20,10 +25,11 @@ class MapReduceCommand(base_command.BaseCommand):
         self._data["mapper"] = encoded
 
     def set_reducer_from_file(self, path):
-        file = open(path, 'r')
+        file = open(path, 'rb')
         file_content = file.read()
-        encoded = base64.b64encode(file_content.encode())
-        self._data["reducer"] = encoded
+        encoded = base64.b64encode(file_content)
+        decoded = encoded.decode('utf-8')
+        self._data["reducer"] = decoded
 
     def set_reducer(self, content):
         # encoded = base64.b64encode(content.encode())

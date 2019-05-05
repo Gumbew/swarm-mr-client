@@ -35,7 +35,7 @@ distribution = tr.make_file(os.path.join(os.path.dirname(__file__), '..', '..', 
 # tr.append(os.path.dirname(__file__)+"\\..\\..\\client_data\\text.txt",'segment example')
 tr.main_func(os.path.join(os.path.dirname(__file__), '..', '..', 'client_data','text.txt'), distribution['distribution'],
              os.path.join(os.path.dirname(__file__), '..', '..', 'client_data','out.txt'))
-tr.map_reduce(False, "MMM", False, "RRR", "0",
+tr.map_reduce(True, "/home/gumbew/workspace/Kursova/swarm-mr-client/../../client_data/mapper.py", True, "/home/gumbew/workspace/Kursova/swarm-mr-client/../../client_data/reducer.py", "0",
               os.path.join(os.path.dirname(__file__), '..', '..', 'client_data', 'text.txt'),
               os.path.join(os.path.dirname(__file__), '..', '..', 'client_data','out.txt'))
 # if __name__ == '__main__':
