@@ -17,3 +17,10 @@ def split_file(file, m):
 
     # print(res)
     return res
+
+def write_to_file(content, file_name):
+    print("WWWWWWW")
+    print(content)
+    file = open(file_name, 'a+')
+    file.write(content['file'])
+    file.close()

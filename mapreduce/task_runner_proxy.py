@@ -1,6 +1,6 @@
 from filesystem import service
 from mapreduce.commands import append_command, make_file_command, map_reduce_command, \
-	refresh_table_command, write_command, clear_data_command
+	refresh_table_command, write_command, clear_data_command, get_file_command
 from config import config_provider
 import os
 
@@ -77,6 +77,15 @@ class TaskRunner:
 		pass
 
 	@staticmethod
+	def get_file(file_name, ip=None):
+		gf = get_file_command.GetFileCommand()
+		gf.set_file_name(file_name)
+		if ip is None:
+			return gf.send()
+		else:
+			return gf.send(ip)
+
+	@staticmethod
 	def clear_data(folder_name):
 		cdc = clear_data_command.ClearDataCommand()
 		cdc.set_folder_name(folder_name)
@@ -91,3 +100,13 @@ class TaskRunner:
 		TaskRunner.main_func(source_file, distribution, destination_file)
 		TaskRunner.map_reduce(is_mapper_in_file, mapper, is_reducer_in_file, reducer, key_delimiter, source_file,
 							  destination_file)
+
+		data_nodes_ip_list = TaskRunner.get_file(destination_file)['data_nodes_ip']
+		for item in data_nodes_ip_list:
+
+			print("CONDYENT")
+			content = TaskRunner.get_file(destination_file, item)
+			service.write_to_file(content,destination_file)
+
+
+
