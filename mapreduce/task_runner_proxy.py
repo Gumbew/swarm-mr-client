@@ -1,6 +1,14 @@
 from filesystem import service
-from mapreduce.commands import append_command, make_file_command, map_reduce_command, \
-	refresh_table_command, write_command, clear_data_command, get_file_command
+from mapreduce.commands import (
+	append_command,
+	make_file_command,
+	map_reduce_command,
+	refresh_table_command,
+	write_command,
+	clear_data_command,
+	get_file_command,
+	get_result_of_key_command
+)
 from config import config_provider
 import os
 
@@ -95,18 +103,36 @@ class TaskRunner:
 	def run_map_reduce(is_mapper_in_file, mapper, is_reducer_in_file, reducer, key_delimiter, source_file,
 					   destination_file):
 
-		TaskRunner.clear_data('data')
+		# TaskRunner.clear_data('data')
 		distribution = TaskRunner.make_file(os.path.join(destination_file))['distribution']
 		TaskRunner.main_func(source_file, distribution, destination_file)
 		TaskRunner.map_reduce(is_mapper_in_file, mapper, is_reducer_in_file, reducer, key_delimiter, source_file,
 							  destination_file)
 
-		data_nodes_ip_list = TaskRunner.get_file(destination_file)['data_nodes_ip']
-		for item in data_nodes_ip_list:
+		# data_nodes_ip_list = TaskRunner.get_file(destination_file)['data_nodes_ip']
+		# for item in data_nodes_ip_list:
+		# 	content = TaskRunner.get_file(destination_file, item)
+		# 	service.write_to_file(content, destination_file)
 
-			print("CONDYENT")
-			content = TaskRunner.get_file(destination_file, item)
-			service.write_to_file(content,destination_file)
+	@staticmethod
+	def get_result_of_key(key, file_name):
+		field_delimiter = config_provider.ConfigProvider.get_field_delimiter(
+			os.path.join('..', 'config', 'json', 'client_config.json'))
+		grk = get_result_of_key_command.GetResultOfKeyCommand()
+		grk.set_key(key)
+		grk.set_file_name(file_name)
+		grk.set_field_delimiter(field_delimiter)
+		json_responce = grk.send()
+		key_hash = json_responce['hash_key']['key_hash']
 
 
-
+		for item in json_responce['key_ranges']:
+			if key_hash >= item['hash_keys_range'][0] and key_hash < item['hash_keys_range'][1]:
+				data_node_ip = item['data_node_ip']
+				break
+			elif key_hash > item['hash_keys_range'][0] and key_hash <= item['hash_keys_range'][1]:
+				data_node_ip = item['data_node_ip']
+				break
+		result = grk.send('http://' + data_node_ip)
+		print(result)
+		service.write_to_file(result['result'], file_name)

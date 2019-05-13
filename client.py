@@ -10,12 +10,18 @@ parser.add_argument("--rf", "--reducer_from_file", action="store",
 parser.add_argument("--kd", "--key_delimiter", action="store", help="Set key delimiter")
 parser.add_argument("--src", "--source_file", action="store", help="Source file path")
 parser.add_argument("--dest", "--destination_file", action="store", help="Destination file path")
+parser.add_argument("--rk", "--result_key", action="store", help="get result of a specified key")
+parser.add_argument("--rem", "--remove_files", action="store", help="clear all data")
 
 args = parser.parse_args()
 
 
 def cli_parser(tr):
 	print(args)
+	if args.rem is not None:
+		return tr.clear_data(args.rem)
+	if args.rk and args.dest is not None:
+		return tr.get_result_of_key(args.rk,args.dest)
 	if args.mf is None:
 		if args.rf is None:
 			return tr.run_map_reduce(False, args.m, False, args.r, args.kd, args.src, args.dest)
@@ -25,6 +31,8 @@ def cli_parser(tr):
 		return tr.run_map_reduce(True, args.mf, False, args.r, args.kd, args.src, args.dest)
 	else:
 		return tr.run_map_reduce(True, args.mf, True, args.rf, args.kd, args.src, args.dest)
+
+
 
 
 # tr.clear_data('data')
