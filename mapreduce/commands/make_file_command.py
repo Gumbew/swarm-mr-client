@@ -18,3 +18,4 @@ class MakeFileCommand(base_command.BaseCommand):
 		data['make_file'] = self._data
 		super(MakeFileCommand, self).__init__(data)
 		return super(MakeFileCommand, self).send()
+
