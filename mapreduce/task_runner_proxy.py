@@ -71,6 +71,7 @@ class TaskRunner:
 	@staticmethod
 	def main_func(file_name, distribution, dest):
 		print(file_name)
+		print(dest)
 		splitted_file = service.split_file(file_name, distribution)
 		counter = 0
 		for fragment in splitted_file:
@@ -102,7 +103,9 @@ class TaskRunner:
 	@staticmethod
 	def clear_data(folder_name):
 		cdc = clear_data_command.ClearDataCommand()
-		cdc.set_folder_name(folder_name)
+		cdc.set_folder_name(folder_name.split(',')[0])
+		vh =  folder_name.split(",")[1]
+		cdc.set_remove_all_data(bool(int(vh)))
 		return cdc.send()
 
 	@staticmethod
