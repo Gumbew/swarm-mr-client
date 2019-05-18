@@ -16,7 +16,8 @@ import os
 class TaskRunner:
 
 	@staticmethod
-	def map_reduce(is_mapper_in_file, mapper, is_reducer_in_file, reducer, key_delimiter, source_file,
+	def map_reduce(is_mapper_in_file, mapper, is_reducer_in_file, reducer, key_delimiter, is_server_source_file,
+				   source_file,
 				   destination_file):
 		mrc = map_reduce_command.MapReduceCommand()
 		if is_mapper_in_file is False:
@@ -29,12 +30,16 @@ class TaskRunner:
 		else:
 			mrc.set_reducer_from_file(reducer)
 
+		if is_server_source_file is True:
+			mrc.set_server_source_file(source_file)
+		else:
+			mrc.set_source_file(source_file)
 		mrc.set_key_delimiter(key_delimiter)
 		field_delimiter = config_provider.ConfigProvider.get_field_delimiter(
 			os.path.join('..', 'config', 'json', 'client_config.json'))
 		mrc.set_field_delimiter(field_delimiter)
-		mrc.set_source_file(source_file)
 		mrc.set_destination_file(destination_file)
+
 		return mrc.send()
 
 	@staticmethod
@@ -65,6 +70,7 @@ class TaskRunner:
 
 	@staticmethod
 	def main_func(file_name, distribution, dest):
+		print(file_name)
 		splitted_file = service.split_file(file_name, distribution)
 		counter = 0
 		for fragment in splitted_file:
@@ -100,19 +106,25 @@ class TaskRunner:
 		return cdc.send()
 
 	@staticmethod
-	def run_map_reduce(is_mapper_in_file, mapper, is_reducer_in_file, reducer, key_delimiter, source_file,
+	def run_map_reduce(is_mapper_in_file, mapper, is_reducer_in_file, reducer, key_delimiter,is_server_source_file, source_file,
 					   destination_file):
+		if not is_server_source_file:
+			distribution = TaskRunner.make_file(os.path.join(destination_file))['distribution']
+			TaskRunner.main_func(source_file, distribution, destination_file)
 
-		# TaskRunner.clear_data('data')
-		distribution = TaskRunner.make_file(os.path.join(destination_file))['distribution']
-		TaskRunner.main_func(source_file, distribution, destination_file)
-		TaskRunner.map_reduce(is_mapper_in_file, mapper, is_reducer_in_file, reducer, key_delimiter, source_file,
+		TaskRunner.map_reduce(is_mapper_in_file, mapper, is_reducer_in_file, reducer, key_delimiter,is_server_source_file, source_file,
 							  destination_file)
 
-		# data_nodes_ip_list = TaskRunner.get_file(destination_file)['data_nodes_ip']
-		# for item in data_nodes_ip_list:
-		# 	content = TaskRunner.get_file(destination_file, item)
-		# 	service.write_to_file(content, destination_file)
+	@staticmethod
+	def push_file_on_cluster(pfc):
+		arr = pfc.split(",")
+		dist = TaskRunner.make_file(arr[1])
+		TaskRunner.main_func(arr[0], dist['distribution'],arr[1])
+
+	# data_nodes_ip_list = TaskRunner.get_file(destination_file)['data_nodes_ip']
+	# for item in data_nodes_ip_list:
+	# 	content = TaskRunner.get_file(destination_file, item)
+	# 	service.write_to_file(content, destination_file)
 
 	@staticmethod
 	def get_result_of_key(key, file_name):
@@ -124,7 +136,6 @@ class TaskRunner:
 		grk.set_field_delimiter(field_delimiter)
 		json_responce = grk.send()
 		key_hash = json_responce['hash_key']['key_hash']
-
 
 		for item in json_responce['key_ranges']:
 			if key_hash >= item['hash_keys_range'][0] and key_hash < item['hash_keys_range'][1]:

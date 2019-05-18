@@ -42,6 +42,10 @@ class MapReduceCommand(base_command.BaseCommand):
 		encoded = field_delimiter
 		self._data['field_delimiter'] = encoded
 
+	def set_server_source_file(self, src_file):
+		encoded = src_file
+		self._data["server_source_file"] = encoded
+
 	def set_source_file(self, src_file):
 		encoded = src_file
 		self._data["source_file"] = encoded
@@ -55,13 +59,10 @@ class MapReduceCommand(base_command.BaseCommand):
 			raise AttributeError("Mapper is empty!")
 		if self._data['reducer'] is None:
 			raise AttributeError("Reducer is empty!")
-		if self._data['source_file'] is None:
+		if not 'source_file' in self._data and not'server_source_file' in self._data:
 			raise AttributeError("Source file in not mentioned!")
 		if self._data['destination_file'] is None:
 			raise AttributeError("Destination file in not mentioned!")
-		print(self._data['source_file'])
-		if os.path.exists(self._data['source_file']) is False:
-			raise FileExistsError()
 
 	def send(self):
 		self.validate()
