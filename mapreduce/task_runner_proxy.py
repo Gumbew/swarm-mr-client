@@ -70,8 +70,6 @@ class TaskRunner:
 
 	@staticmethod
 	def main_func(file_name, distribution, dest):
-		print(file_name)
-		print(dest)
 		splitted_file = service.split_file(file_name, distribution)
 		counter = 0
 		for fragment in splitted_file:
@@ -112,22 +110,22 @@ class TaskRunner:
 	def run_map_reduce(is_mapper_in_file, mapper, is_reducer_in_file, reducer, key_delimiter,is_server_source_file, source_file,
 					   destination_file):
 		if not is_server_source_file:
+			print("MAKE_FILE_ON_CLUSTER_FINISHED")
 			distribution = TaskRunner.make_file(os.path.join(destination_file))['distribution']
+			print("MAKING_FILE_ON_CLUSTER_FINISHED")
+			print("APPEND_AND_WRITE_PHASE")
 			TaskRunner.main_func(source_file, distribution, destination_file)
-
+			print("APPEND_AND_WRITE_PHASE_FINISHED")
+		print("MAP_REDUCE_STARTED")
 		TaskRunner.map_reduce(is_mapper_in_file, mapper, is_reducer_in_file, reducer, key_delimiter,is_server_source_file, source_file,
 							  destination_file)
-
+		print("MAP_REDUCE_FINISHED")
+		print("COMPLETED!")
 	@staticmethod
 	def push_file_on_cluster(pfc):
 		arr = pfc.split(",")
 		dist = TaskRunner.make_file(arr[1])
 		TaskRunner.main_func(arr[0], dist['distribution'],arr[1])
-
-	# data_nodes_ip_list = TaskRunner.get_file(destination_file)['data_nodes_ip']
-	# for item in data_nodes_ip_list:
-	# 	content = TaskRunner.get_file(destination_file, item)
-	# 	service.write_to_file(content, destination_file)
 
 	@staticmethod
 	def get_result_of_key(key, file_name):
@@ -139,7 +137,7 @@ class TaskRunner:
 		grk.set_field_delimiter(field_delimiter)
 		json_responce = grk.send()
 		key_hash = json_responce['hash_key']['key_hash']
-
+		print(json_responce)
 		for item in json_responce['key_ranges']:
 			if key_hash >= item['hash_keys_range'][0] and key_hash < item['hash_keys_range'][1]:
 				data_node_ip = item['data_node_ip']
@@ -148,5 +146,4 @@ class TaskRunner:
 				data_node_ip = item['data_node_ip']
 				break
 		result = grk.send('http://' + data_node_ip)
-		print(result)
 		service.write_to_file(result['result'], file_name)

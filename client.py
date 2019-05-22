@@ -19,13 +19,15 @@ args = parser.parse_args()
 
 
 def cli_parser(tr):
-	print(args)
 	if args.pfc is not None:
-		print(type(args.pfc))
 		return tr.push_file_on_cluster(args.pfc)
 	if args.rem is not None:
+		print("CLEAR_DATA_STARTED")
+		print("CLEAR_DATA_FINISHED!")
 		return tr.clear_data(args.rem)
+
 	if args.rk and args.dest is not None:
+		print("GET_KEY_FROM_CLUSTER")
 		return tr.get_result_of_key(args.rk, args.dest)
 
 	if args.mf is None:
@@ -72,4 +74,5 @@ def cli_parser(tr):
 #               os.path.join(os.path.dirname(__file__), '..', '..', 'client_data','out.txt'))
 if __name__ == '__main__':
 	tr = task_runner_proxy.TaskRunner()
+
 	cli_parser(tr)
